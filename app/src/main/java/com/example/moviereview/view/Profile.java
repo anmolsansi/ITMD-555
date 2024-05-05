@@ -79,6 +79,7 @@ public class Profile extends AppCompatActivity {
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(Profile.this, "Signout successful", Toast.LENGTH_LONG).show();
                 signOut();
             }
         });
