@@ -19,7 +19,7 @@ import com.example.moviereview.controller.SearchAdapter;
 import com.example.moviereview.model.Movie;
 import com.example.moviereview.model.MovieApiService;
 import com.example.moviereview.model.MovieResponse;
-import com.example.moviereview.model.RetrofitInstance;
+import com.example.moviereview.model.RetrofitInstanceTMDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class SearchResultActivity extends AppCompatActivity {
             }
         });
         searchResults = new ArrayList<>();
-        movieApiService = RetrofitInstance.getRetrofitInstance().create(MovieApiService.class);
+        movieApiService = RetrofitInstanceTMDB.getRetrofitInstance().create(MovieApiService.class);
         searchMovies(queryText);
 
 

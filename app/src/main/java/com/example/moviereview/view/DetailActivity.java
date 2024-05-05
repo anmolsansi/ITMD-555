@@ -20,10 +20,9 @@ import com.example.moviereview.controller.CategoryEachFilmListController;
 import com.example.moviereview.model.Genre;
 import com.example.moviereview.model.MovieApiService;
 import com.example.moviereview.model.MovieDetail;
-import com.example.moviereview.model.RetrofitInstance;
+import com.example.moviereview.model.RetrofitInstanceTMDB;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,7 +45,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         idFilm = getIntent().getIntExtra("id", 0);
-        movieApiService = RetrofitInstance.getRetrofitInstance().create(MovieApiService.class);
+        movieApiService = RetrofitInstanceTMDB.getRetrofitInstance().create(MovieApiService.class);
         initView();
         sendRequest();
     }

@@ -25,7 +25,8 @@ import com.example.moviereview.controller.SliderController;
 import com.example.moviereview.model.Movie;
 import com.example.moviereview.model.MovieApiService;
 import com.example.moviereview.model.MovieResponse;
-import com.example.moviereview.model.RetrofitInstance;
+import com.example.moviereview.model.RetrofitInstanceOMDB;
+import com.example.moviereview.model.RetrofitInstanceTMDB;
 import com.example.moviereview.model.SliderItems;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class HomepageActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private Handler slideHandler = new Handler();
     private RequestQueue requestQueue;
-    private MovieApiService movieApiService;
+    private MovieApiService movieApiServiceTMDB, movieApiServiceOMDB;
     private List<Movie> movies;
     private List<Movie> recommendedMovies;
     private List<Movie> upcomingMovies;
@@ -80,7 +81,8 @@ public class HomepageActivity extends AppCompatActivity {
         initView();
         movies = new ArrayList<>();
         recommendedMovies = new ArrayList<>();
-        movieApiService = RetrofitInstance.getRetrofitInstance().create(MovieApiService.class);
+        movieApiServiceTMDB = RetrofitInstanceTMDB.getRetrofitInstance().create(MovieApiService.class);
+        movieApiServiceOMDB = RetrofitInstanceOMDB.getRetrofitInstance().create(MovieApiService.class);
         fetchTopMovies();
         sendRequestRecommendedMovies();
         sendRequestUpcomingMovies();
@@ -110,7 +112,8 @@ public class HomepageActivity extends AppCompatActivity {
     private void sendRequestRecommendedMovies() {
         lBar1.setVisibility(View.VISIBLE);
 
-        Call<MovieResponse> call = movieApiService.getNowPlayingMovies("fd99a8ce13e0f7024121db73fe267e19");
+        Call<MovieResponse> callOMDB = movieApiServiceOMDB.searchMoviesOMDB("fd99a8ce13e0f7024121db73fe267e19", "query");
+        Call<MovieResponse> call = movieApiServiceTMDB.getNowPlayingMovies("fd99a8ce13e0f7024121db73fe267e19");
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
@@ -136,8 +139,6 @@ public class HomepageActivity extends AppCompatActivity {
                 Log.e("API Error", "Failed to fetch data: " + t.getMessage());
             }
         });
-
-
     }
 
     private void initView() {
@@ -171,7 +172,7 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
     private void performSearch(String query) {
-        Call<MovieResponse> call = movieApiService.searchMovies("fd99a8ce13e0f7024121db73fe267e19", query);
+        Call<MovieResponse> call = movieApiServiceTMDB.searchMovies("fd99a8ce13e0f7024121db73fe267e19", query);
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
@@ -205,7 +206,7 @@ public class HomepageActivity extends AppCompatActivity {
     private void sendRequestUpcomingMovies() {
         lBar2.setVisibility(View.VISIBLE);
 
-        Call<MovieResponse> call = movieApiService.getUpcomingMovies("fd99a8ce13e0f7024121db73fe267e19");
+        Call<MovieResponse> call = movieApiServiceTMDB.getUpcomingMovies("fd99a8ce13e0f7024121db73fe267e19");
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
@@ -238,7 +239,7 @@ public class HomepageActivity extends AppCompatActivity {
     private void sendRequestLatestMovies() {
         lBar3.setVisibility(View.VISIBLE);
 
-        Call<MovieResponse> call = movieApiService.getLatestMovies("fd99a8ce13e0f7024121db73fe267e19");
+        Call<MovieResponse> call = movieApiServiceTMDB.getLatestMovies("fd99a8ce13e0f7024121db73fe267e19");
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
@@ -270,7 +271,7 @@ public class HomepageActivity extends AppCompatActivity {
 
 
     private void fetchTopMovies() {
-        Call<MovieResponse> call = movieApiService.getTopRatedMovies("fd99a8ce13e0f7024121db73fe267e19");
+        Call<MovieResponse> call = movieApiServiceTMDB.getTopRatedMovies("fd99a8ce13e0f7024121db73fe267e19");
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
